@@ -1,0 +1,17 @@
+[project]
+name = "french-sentiment-camembert"
+version = "0.1.0"
+description = "Fine-tuning CamemBERT for French sentiment analysis"
+requires-python = ">=3.10"
+
+dependencies = [
+    "torch",
+    "transformers",
+    "datasets",
+    "scikit-learn",
+    "matplotlib",
+    "pandas",
+    "numpy",
+    "evaluate",
+    "accelerate",
+]
