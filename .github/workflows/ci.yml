@@ -20,7 +20,7 @@ jobs:
 
             - name: Install dependencies
               run: |
-                pip install datasets pandas matplotlib scikit-learn flake8 pytest            
+                pip install datasets pandas matplotlib scikit-learn flake8 pytest --quiet            
             
             - name: Check code style
               run: |
