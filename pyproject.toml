@@ -15,3 +15,7 @@ dependencies = [
     "evaluate",
     "accelerate",
 ]
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
