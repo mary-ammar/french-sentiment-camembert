@@ -1,36 +1,41 @@
 name: CI
 
 on:
-  push:
-    branches: [main, "feature/**"]
-  pull_request:
-    branches: [main]
+    push:
+    pull_request:
+        branches: [main]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+    lint-and-test:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-          cache: "pip"
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.10'
 
-      - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install torch transformers datasets scikit-learn \
-                      matplotlib pandas numpy evaluate accelerate
-
-      - name: Check imports
-        run: |
-          python -c "import torch; import transformers; import datasets; print('All imports OK')"
-
-      - name: Run tests
-        run: |
-          python -m pytest tests/ -v --tb=short
-        continue-on-error: true
+            - name: Install dependencies
+              run: |
+                pip install -e .
+                pip install flake8 pytest
+            
+            - name: Check code style
+              run: |
+                flake8 src/ scripts/ --max-line-length=88 --ignore=E501
+            
+            - name: Run tests
+              run: |
+                pytest tests/ -v
+            
+            - name: Check dataset loading
+              run: |
+                python -c "
+                from datasets import load_dataset
+                dataset = load_dataset('allocine')
+                assert len(dataset['train']) == 160000, 'Train size incorrect'
+                assert len(dataset['test']) == 20000, 'Test size incorrect'
+                print('Dataset loaded successfully!')"
