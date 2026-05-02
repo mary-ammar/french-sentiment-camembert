@@ -42,7 +42,14 @@ pip install -e .
 - Average review length: 91 words — well within CamemBERT's 512 token limit
 - Saved figures in `results/figures/`
 
+
 ### Step 3 — Preprocessing & Tokenization
+- Tokenized all reviews with `camembert-base` tokenizer (vocab: 32 005 tokens)
+- Chose MAX_LENGTH=256 — covers 100% of reviews (max observed: 502 tokens)
+- Split: 160 000 train / 20 000 val / 20 000 test
+- Created DataLoaders with batch size 16
+- Saved tokenized datasets in `results/data/tokenized_datasets.pkl`
+
 ### Step 4 — Fine-tuning CamemBERT
 ### Step 5 — Evaluation vs TF-IDF baseline
 ### Step 6 — Documentation
