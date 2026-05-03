@@ -14,8 +14,9 @@ dependencies = [
     "numpy",
     "evaluate",
     "accelerate",
+    "jupyter",
+    "ipykernel",
 ]
-
 
 [tool.setuptools.packages.find]
 where = ["src"]

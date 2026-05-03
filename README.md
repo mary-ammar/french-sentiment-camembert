@@ -50,6 +50,16 @@ pip install -e .
 - Created DataLoaders with batch size 16
 - Saved tokenized datasets in `results/data/tokenized_datasets.pkl`
 
-### Step 4 — Fine-tuning CamemBERT
-### Step 5 — Evaluation vs TF-IDF baseline
-### Step 6 — Documentation
+### Step 4 — TF-IDF Baseline
+- Trained TF-IDF + Logistic Regression on 160k reviews
+- Val Accuracy: 93.92% — Test Accuracy: 94.06%
+- Val F1: 93.92% — Test F1: 94.06%
+- No over-fitting: val ≈ test scores
+- Saved metrics in `results/metrics/baseline_metrics.pkl`
+- **Target for CamemBERT: F1 > 94%**
+
+### Step 5 — Fine-tuning CamemBERT
+
+### Step 6 — Evaluation vs TF-IDF baseline
+
+### Step 7 — Documentation
