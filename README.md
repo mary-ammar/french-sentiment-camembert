@@ -59,6 +59,11 @@ pip install -e .
 - **Target for CamemBERT: F1 > 94%**
 
 ### Step 5 — Fine-tuning CamemBERT
+- Fine-tuned `camembert-base` on 160k French movie reviews
+- 3 epochs on T4 GPU (Google Colab) — training time ~2 hours
+- Test Accuracy: 97.18% — Test F1: 97.18%
+- Improvement over TF-IDF baseline: **+3.12%**
+- Model saved in `results/models/camembert-sentiment/`
 
 ### Step 6 — Evaluation vs TF-IDF baseline
 
