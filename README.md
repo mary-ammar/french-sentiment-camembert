@@ -27,7 +27,13 @@ pip install -e .
 ```
 
 ## Results
-*To be updated after training.*
+
+| Model | Test Accuracy | Test F1 |
+|-------|--------------|---------|
+| TF-IDF + LogisticRegression | 94.06% | 94.06% |
+| CamemBERT fine-tuned | 97.18% | 97.18% |
+
+CamemBERT outperforms the TF-IDF baseline by **+3.12% F1**.
 
 ## Progress
 
@@ -66,5 +72,18 @@ pip install -e .
 - Model saved in `results/models/camembert-sentiment/`
 
 ### Step 6 — Evaluation vs TF-IDF baseline
+
+- Compared TF-IDF baseline vs CamemBERT fine-tuned on test set
+- Generated model comparison bar chart and training curves
+- Error analysis on baseline misclassified reviews
+
+| Model | Test Accuracy | Test F1 |
+|-------|--------------|---------|
+| TF-IDF + LogisticRegression | 94.06% | 94.06% |
+| CamemBERT fine-tuned | 97.18% | 97.18% |
+| **Improvement** | **+3.12%** | **+3.12%** |
+
+- Saved figures in `results/figures/`
+- Saved final summary in `results/metrics/final_summary.pkl`
 
 ### Step 7 — Documentation
