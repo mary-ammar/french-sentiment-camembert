@@ -58,7 +58,7 @@ def predict_tfidf(text, clf, vec):
     return label, float(proba[label])
 
 def predict_camembert(text, pipe):
-    result = pipe(text[:512])[0]
+    result = pipe(text, truncation=True, max_length=512)[0]
     label = 1 if result['label'] == 'Positive' else 0
     return label, float(result['score'])
 

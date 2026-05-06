@@ -22,8 +22,9 @@ jobs:
           - name: Install dependencies
             run: |
               pip install --upgrade pip
-              pip install torch transformers datasets scikit-learn \
-                          matplotlib pandas numpy evaluate accelerate
+              pip install transformers datasets scikit-learn \
+                          matplotlib pandas numpy evaluate accelerate && \
+              pip install torch --index-url https://download.pytorch.org/whl/cpu
     
           - name: Check imports
             run: |
