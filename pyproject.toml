@@ -16,6 +16,9 @@ dependencies = [
     "accelerate",
     "jupyter",
     "ipykernel",
+    "streamlit",
+    "sentencepiece",
+    "protobuf",
 ]
 
 [tool.setuptools.packages.find]

@@ -216,3 +216,17 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Large model file — too big for GitHub (445MB)
+results/models/camembert-sentiment/model.safetensors
+
+# Pickle files — too large / not needed in git
+results/data/tokenized_datasets.pkl
+results/models/baseline_clf.pkl
+results/models/baseline_vectorizer.pkl
+
+# src egg info — auto-generated
+src/UNKNOWN.egg-info/
+
+# Streamlit
+.streamlit/

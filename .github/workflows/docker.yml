@@ -1,0 +1,25 @@
+name: Docker
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t french-sentiment .
+
+      - name: Run container test
+        run: |
+          docker run -d -p 8501:8501 --name test-container french-sentiment
+          sleep 10
+          curl --fail http://localhost:8501 || exit 1
+          docker stop test-container
