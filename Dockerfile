@@ -8,17 +8,16 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir streamlit transformers \
-    scikit-learn sentencepiece protobuf numpy && \
+        scikit-learn sentencepiece protobuf numpy && \
     pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 
 COPY app.py .
 COPY src/ src/
+
+# Model weights are not committed to git (too large).
+# Run `make train` before `docker build` to generate them.
 COPY results/models/ results/models/
 
 EXPOSE 8501
