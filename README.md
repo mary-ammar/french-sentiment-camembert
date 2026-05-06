@@ -85,5 +85,3 @@ CamemBERT outperforms the TF-IDF baseline by **+3.12% F1**.
 
 - Saved figures in `results/figures/`
 - Saved final summary in `results/metrics/final_summary.pkl`
-
-### Step 7 — Documentation
