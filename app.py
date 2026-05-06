@@ -1,7 +1,10 @@
 import streamlit as st
-import pickle
-import numpy as np
-import os
+from src.model import (
+    load_model as _load_model,
+    predict_tfidf,
+    predict_camembert,
+    get_influential_words,
+)
 
 st.set_page_config(page_title="French Sentiment Analysis", page_icon="🎬", layout="centered")
 
@@ -29,49 +32,11 @@ h1 { font-family: 'DM Serif Display', serif; font-size: 2.8rem !important; color
 </style>
 """, unsafe_allow_html=True)
 
-BASE_DIR       = os.path.dirname(os.path.abspath(__file__))
-CAMEMBERT_PATH = os.path.join(BASE_DIR, 'results', 'models', 'camembert-sentiment')
-BASELINE_CLF   = os.path.join(BASE_DIR, 'results', 'models', 'baseline_clf.pkl')
-BASELINE_VEC   = os.path.join(BASE_DIR, 'results', 'models', 'baseline_vectorizer.pkl')
 
 @st.cache_resource
 def load_model():
-    if os.path.exists(os.path.join(CAMEMBERT_PATH, 'config.json')):
-        try:
-            from transformers import pipeline
-            pipe = pipeline('text-classification', model=CAMEMBERT_PATH, tokenizer=CAMEMBERT_PATH, device=-1)
-            return 'camembert', pipe, None, None
-        except Exception as e:
-            st.warning(f"CamemBERT failed: {e}. Using TF-IDF.")
-    if os.path.exists(BASELINE_CLF) and os.path.exists(BASELINE_VEC):
-        with open(BASELINE_CLF, 'rb') as f:
-            clf = pickle.load(f)
-        with open(BASELINE_VEC, 'rb') as f:
-            vec = pickle.load(f)
-        return 'tfidf', None, clf, vec
-    return 'none', None, None, None
+    return _load_model()
 
-def predict_tfidf(text, clf, vec):
-    X = vec.transform([text])
-    proba = clf.predict_proba(X)[0]
-    label = int(np.argmax(proba))
-    return label, float(proba[label])
-
-def predict_camembert(text, pipe):
-    result = pipe(text, truncation=True, max_length=512)[0]
-    label = 1 if result['label'] == 'Positive' else 0
-    return label, float(result['score'])
-
-def get_influential_words(text, vec, clf, n=10):
-    feature_names = vec.get_feature_names_out()
-    coef = clf.coef_[0]
-    present = []
-    for token in text.lower().split():
-        if token in vec.vocabulary_:
-            idx = vec.vocabulary_[token]
-            present.append((token, coef[idx]))
-    present.sort(key=lambda x: abs(x[1]), reverse=True)
-    return present[:n]
 
 model_type, pipe, clf, vec = load_model()
 
@@ -83,7 +48,7 @@ if model_type == 'camembert':
 elif model_type == 'tfidf':
     st.markdown('<span class="model-badge">📊 TF-IDF Baseline · F1 94.06%</span>', unsafe_allow_html=True)
 else:
-    st.error("No model found. Check results/models/ folder.")
+    st.error("No model found. Run `make train` to generate model weights, then restart the app.")
     st.stop()
 
 EXAMPLES = [
@@ -110,11 +75,15 @@ if analyze:
     if not review.strip():
         st.warning("Please enter a review first.")
     else:
-        with st.spinner("Analysing..."):
-            if model_type == 'camembert':
-                label, confidence = predict_camembert(review, pipe)
-            else:
-                label, confidence = predict_tfidf(review, clf, vec)
+        try:
+            with st.spinner("Analysing..."):
+                if model_type == 'camembert':
+                    label, confidence = predict_camembert(review, pipe)
+                else:
+                    label, confidence = predict_tfidf(review, clf, vec)
+        except Exception as e:
+            st.error(f"Prediction failed: {e}")
+            st.stop()
 
         is_positive = label == 1
         sentiment   = "Positive" if is_positive else "Negative"

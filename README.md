@@ -1,30 +1,29 @@
 # French Sentiment Analysis with CamemBERT
 
-Fine-tuning CamemBERT for sentiment classification (positive / negative) on French customer reviews.
+Fine-tuning CamemBERT for sentiment classification (positive / negative) on French movie reviews.
 
 ## Project Structure
 
 ```
 french-sentiment-camembert/
-├── data/               → raw dataset
+├── app.py              → Streamlit dashboard
+├── src/                → reusable model loading & prediction logic
+├── scripts/            → standalone preprocess.py and train.py
 ├── notebooks/          → exploration, preprocessing, fine-tuning
-├── scripts/            → training and evaluation scripts
-├── src/                → source code modules
-├── results/            → metrics and figures
+├── data/               → raw dataset
+├── results/            → models, metrics, figures
 └── docs/               → project documentation
 ```
+
 ## Dataset
+
 [Allociné](https://huggingface.co/datasets/allocine) — 160k French movie reviews (pos/neg) via HuggingFace.
 
 ## Model
+
 - Base model: `camembert-base`
 - Fine-tuned with HuggingFace `Trainer`
 - Evaluated with F1 score vs TF-IDF baseline
-
-## Setup
-```bash
-pip install -e .
-```
 
 ## Results
 
@@ -34,6 +33,66 @@ pip install -e .
 | CamemBERT fine-tuned | 97.18% | 97.18% |
 
 CamemBERT outperforms the TF-IDF baseline by **+3.12% F1**.
+
+## Reproduce from scratch
+
+> **Note:** The trained model weights (`model.safetensors`, ~442 MB) are not committed to git because of their size. You must generate them locally by running the steps below before the app will use CamemBERT. Without weights it falls back to the TF-IDF baseline automatically.
+
+### 1. Install dependencies
+
+```bash
+pip install -e ".[dev]"
+```
+
+### 2. (Optional) Pre-tokenize the dataset
+
+Caches the tokenized Allociné dataset to `results/data/tokenized_datasets.pkl` so training starts faster. Skip this step and `train.py` will tokenize on the fly.
+
+```bash
+make preprocess
+# or: python scripts/preprocess.py
+```
+
+### 3. Train both models
+
+Trains the TF-IDF baseline and fine-tunes CamemBERT (~2 hours on a T4 GPU). Saves weights to `results/models/`.
+
+```bash
+make train
+# or: python scripts/train.py
+```
+
+### 4. Run the app
+
+```bash
+make app
+# or: streamlit run app.py
+```
+
+### 5. Run with Docker
+
+```bash
+make docker-build
+make docker-run
+# then open http://localhost:8501
+```
+
+> Docker requires the model weights to already exist in `results/models/` — run step 3 first.
+
+### 6. Run tests
+
+```bash
+make test
+# or: pytest tests/ -v
+```
+
+## Development
+
+```bash
+pip install -e ".[dev]"
+make lint   # ruff check
+make test   # pytest
+```
 
 ## Progress
 
@@ -47,7 +106,6 @@ CamemBERT outperforms the TF-IDF baseline by **+3.12% F1**.
 - Dataset is perfectly balanced (50.4% pos / 49.6% neg)
 - Average review length: 91 words — well within CamemBERT's 512 token limit
 - Saved figures in `results/figures/`
-
 
 ### Step 3 — Preprocessing & Tokenization
 - Tokenized all reviews with `camembert-base` tokenizer (vocab: 32 005 tokens)
@@ -89,4 +147,4 @@ CamemBERT outperforms the TF-IDF baseline by **+3.12% F1**.
 ### Step 7 — Dashboard & Docker
 - Built Streamlit dashboard for French sentiment analysis
 - Supports CamemBERT (F1 97.18%) with TF-IDF fallback
-- Dockerized — run with `docker run -p 8501:8501 french-sentiment`
+- Dockerized — run with `docker run -p 8501:8501 french-sentiment-camembert`

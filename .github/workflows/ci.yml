@@ -12,25 +12,24 @@ jobs:
         steps:
           - name: Checkout
             uses: actions/checkout@v4
-    
+
           - name: Set up Python
             uses: actions/setup-python@v5
             with:
               python-version: "3.12"
               cache: "pip"
-    
+
           - name: Install dependencies
             run: |
               pip install --upgrade pip
               pip install transformers datasets scikit-learn \
-                          matplotlib pandas numpy evaluate accelerate && \
+                          matplotlib pandas numpy evaluate accelerate pytest && \
               pip install torch --index-url https://download.pytorch.org/whl/cpu
-    
+
           - name: Check imports
             run: |
               python -c "import torch; import transformers; import datasets; print('All imports OK')"
-    
+
           - name: Run tests
             run: |
-              python -m pytest tests/ -v --tb=short
-            continue-on-error: true
+              pytest tests/ -v --tb=short

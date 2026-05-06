@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.12-slim-bookworm
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -12,14 +12,13 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade pip && \
-    pip install streamlit transformers \
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir streamlit transformers \
     scikit-learn sentencepiece protobuf numpy && \
-    pip install torch --index-url https://download.pytorch.org/whl/cpu
-
-
+    pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 
 COPY app.py .
+COPY src/ src/
 COPY results/models/ results/models/
 
 EXPOSE 8501
