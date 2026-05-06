@@ -55,12 +55,14 @@ make preprocess
 
 ### 3. Train both models
 
-Trains the TF-IDF baseline and fine-tunes CamemBERT (~2 hours on a T4 GPU). Saves weights to `results/models/`.
+Trains the TF-IDF baseline and fine-tunes CamemBERT. Saves weights to `results/models/`.
 
 ```bash
 make train
 # or: python scripts/train.py
 ```
+
+> **GPU strongly recommended.** Training takes ~2 hours on a T4 GPU (Google Colab). On CPU it will work but take many hours. The script auto-detects your hardware.
 
 ### 4. Run the app
 

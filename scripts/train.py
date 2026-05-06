@@ -9,6 +9,7 @@ import pickle
 from pathlib import Path
 
 import numpy as np
+import torch
 from datasets import load_dataset
 from transformers import (
     CamembertForSequenceClassification,
@@ -121,7 +122,7 @@ def train_camembert():
         save_strategy='epoch',
         load_best_model_at_end=True,
         metric_for_best_model='f1',
-        fp16=True,
+        fp16=torch.cuda.is_available(),
     )
 
     trainer = Trainer(
