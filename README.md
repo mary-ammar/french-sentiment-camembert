@@ -85,3 +85,8 @@ CamemBERT outperforms the TF-IDF baseline by **+3.12% F1**.
 
 - Saved figures in `results/figures/`
 - Saved final summary in `results/metrics/final_summary.pkl`
+
+### Step 7 — Dashboard & Docker
+- Built Streamlit dashboard for French sentiment analysis
+- Supports CamemBERT (F1 97.18%) with TF-IDF fallback
+- Dockerized — run with `docker run -p 8501:8501 french-sentiment`
