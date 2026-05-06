@@ -12,8 +12,11 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-COPY pyproject.toml .
-RUN pip install --upgrade pip && pip install .
+RUN pip install --upgrade pip && \
+    pip install streamlit transformers torch \
+    scikit-learn sentencepiece protobuf numpy
+
+
 
 COPY app.py .
 COPY results/models/ results/models/
