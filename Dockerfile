@@ -13,8 +13,9 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip && \
-    pip install streamlit transformers torch \
-    scikit-learn sentencepiece protobuf numpy
+    pip install streamlit transformers \
+    scikit-learn sentencepiece protobuf numpy && \
+    pip install torch --index-url https://download.pytorch.org/whl/cpu
 
 
 

@@ -44,8 +44,10 @@ def load_model():
         except Exception as e:
             st.warning(f"CamemBERT failed: {e}. Using TF-IDF.")
     if os.path.exists(BASELINE_CLF) and os.path.exists(BASELINE_VEC):
-        clf = pickle.load(open(BASELINE_CLF, 'rb'))
-        vec = pickle.load(open(BASELINE_VEC, 'rb'))
+        with open(BASELINE_CLF, 'rb') as f:
+            clf = pickle.load(f)
+        with open(BASELINE_VEC, 'rb') as f:
+            vec = pickle.load(f)
         return 'tfidf', None, clf, vec
     return 'none', None, None, None
 
