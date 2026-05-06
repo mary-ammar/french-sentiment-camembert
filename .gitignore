@@ -216,3 +216,13 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# Model files (too large for GitHub)
+results/models/camembert-sentiment/model.safetensors
+
+# Streamlit config
+.streamlit/
+
+# Data
+results/data/tokenized_datasets.pkl
